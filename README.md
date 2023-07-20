@@ -80,6 +80,11 @@ learning to read assambly code
             a=c;
             delete ptr;
             ```
+            * 访问结构体或类对象的成员
+            ```  c++
+            Human jack;
+            jack.id =1;
+            ```
     * rip-relative `lea	rax, .LC0[rip]` .LC0是字符串相对于rip的偏移量，是PIC
     </br>$\quad$ 常见于：
         * 对全局变量的使用
@@ -88,6 +93,10 @@ learning to read assambly code
             string str = "hello world";
             printf("cycle times %d",index);
             ```
+    * <font color=#ff0>以上各种寻址可总结为</font>
+        ```
+        EffectiveAddress = BaseReg + IndexReg * ScaleFactor + Disp
+        ```
     </br>
 * `条件跳转、非条件跳转、间接跳转、函数调用、返回`
     </br>*<font color=#FF808>注意：跳转指令以及call操作的立即数就是相对于rip(或esp)的偏移，不是绝对地址 !</font>*
