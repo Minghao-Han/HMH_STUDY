@@ -9,6 +9,7 @@
 * 由汇编变为目标代码(机器代码)生成.o的文件`[使用-c参数]`
 
 * 连接目标代码,生成可执行程序`[g++ file1.o [file2.o ...] -o all_file]`
+    * 不开启堆栈溢出保护，即不生成 canary `[-fno-stack-protector]`
 * 生成可调试文件a.out `[使用-g参数]`
     * 指定intel语法 `[-masm=intel]`
 ## `objdump`
@@ -42,3 +43,4 @@
     * 挂卷 `[-v 本机文件夹地址:容器挂载地址]`
 * 在容器中执行 `[exec 命令行指令]`
 * 卷 `[volume]`
+## `vmmap`

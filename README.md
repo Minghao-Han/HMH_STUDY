@@ -153,3 +153,5 @@ learning to read assambly code
         * ret 从栈中弹出返回地址并跳转，同时恢复栈底指针rbp到上一函数帧的栈底。
         * 清理栈中的参数。
         * 从栈中恢复rsi,rdi,rcx,rdx,r8,r9寄存器（若使用）。
+## 2023.7.20
+* ready to make some exec crash
