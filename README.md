@@ -1,22 +1,28 @@
 # HMH_STUDY
+
 ## 2023.7.13
+
 complete git config on docker-ubuntu, successfully access to remote git repository 11:08
 learning to read assambly code
+
 ## 2023.7.17
+
 完成linux中elf格式和x86汇编和指令集的学习
 学会IDA和gdb的基本使用
+
 ## 2023.7.18
+
 * `.text节、.data节等是什么意思?`
 
     .text节 elf文件中的程序代码所在的节，可读可执行但不可写
     .data节 elf文件中已初始化的程序全局变量或静态变量所在的节，可读写
 * `在一个典型的C/C++程序中，全局变量、栈变量、堆变量，在汇编语言层面是如何体现的?`
 
-    * 全局变量：已初始化的存放在.data，未初始化的存放在.bss，在代码段被使用。
-    * 堆变量：调用new,malloc等库函数,再由库函数调用system call在内存上分配空间，参数为需要分配的字节数(编译器自行计算)。且必须销毁！（会先检查是否为空指针，若不是才进行销毁）
+  * 全局变量：已初始化的存放在.data，未初始化的存放在.bss，在代码段被使用。
+  * 堆变量：调用new,malloc等库函数,再由库函数调用system call在内存上分配空间，参数为需要分配的字节数(编译器自行计算)。且必须销毁！（会先检查是否为空指针，若不是才进行销毁）
 
         *注意：int* ptr = new int[5];中的ptr是局部变量，栈变量，new出来的数组才是放在堆里的。
-    * 栈变量：程序中的局部变量或部分函数参数，存放在栈中。每个函数都自己的帧，由栈底指针确定当前栈。以小端系统为例，栈顶指针增回收栈，减扩容栈，push压栈并减，pop弹栈并增。一般通过栈底指针加偏移量取值(栈底指针较稳定)。在x86-64中栈底指针通常存放在rbp，栈顶指针存放在rsp。(risc-v的fp,sp)。
+  * 栈变量：程序中的局部变量或部分函数参数，存放在栈中。每个函数都自己的帧，由栈底指针确定当前栈。以小端系统为例，栈顶指针增回收栈，减扩容栈，push压栈并减，pop弹栈并增。一般通过栈底指针加偏移量取值(栈底指针较稳定)。在x86-64中栈底指针通常存放在rbp，栈顶指针存放在rsp。(risc-v的fp,sp)。
     </br><font color=grey>*注意：一个函数中的所有局部变量(non-static)都会在函数一开始为他们在栈上分配空间*</font>
 * `ELF程序的节的权限是什么意思，例如，什么是可读、可写、可执行等?`
 
@@ -27,118 +33,130 @@ learning to read assambly code
     可执行，如.text节(程序的代码段)。
 * `ELF程序中，符号是什么意思，调试信息是什么意思，字符串、符号、调试信息有什么区别?`
 
-    * 符号（Symbols）是与程序中的函数、变量或其他实体相关联的标识符。
-        * 有三种类型（c/c++为例）:
-            * global symbol 没被static修饰的全局变量，外部文件可引用
-            * external symbol 引用的定义在别的文件中的global symbol
-            * local symbol 被static修饰的全局变量，只在本文件中可被引用
+  * 符号（Symbols）是与程序中的函数、变量或其他实体相关联的标识符。
+    * 有三种类型（c/c++为例）:
+      * global symbol 没被static修饰的全局变量，外部文件可引用
+      * external symbol 引用的定义在别的文件中的global symbol
+      * local symbol 被static修饰的全局变量，只在本文件中可被引用
 
-        * 强弱之分：已初始化的为强符号，反之为弱。对符号引用和符号定义连接的过程会有影响：
-            * 不能有同名的强符号，会error
-            * 同名的强符号和弱符号，linker选强符号
-            * 同名的弱符号，linker随机选择一个  
+    * 强弱之分：已初始化的为强符号，反之为弱。对符号引用和符号定义连接的过程会有影响：
+      * 不能有同名的强符号，会error
+      * 同名的强符号和弱符号，linker选强符号
+      * 同名的弱符号，linker随机选择一个  
 
-    * 调试信息是是与程序执行相关的附加数据，用于在调试和分析程序时提供更多的上下文和信息。调试信息包含有关源代码文件、行号、变量名称、类型信息和编译器生成的其他调试相关信息。这些信息有助于调试器和其他工具在源代码级别进行调试和分析。gcc/g++中带参数-g生成可调试的可执行文件.out
-    * 字符串是一种数据类型，用于存储文本数据，通常用于表示符号名称、文件路径和调试信息中的文本
+  * 调试信息是是与程序执行相关的附加数据，用于在调试和分析程序时提供更多的上下文和信息。调试信息包含有关源代码文件、行号、变量名称、类型信息和编译器生成的其他调试相关信息。这些信息有助于调试器和其他工具在源代码级别进行调试和分析。gcc/g++中带参数-g生成可调试的可执行文件.out
+  * 字符串是一种数据类型，用于存储文本数据，通常用于表示符号名称、文件路径和调试信息中的文本
 
 * `x86-64寄存器`
 
     常用的有：
-    * `rax` 常用作函数返回值
-    * `rsp`栈顶指针
-    * `rbp` 栈底指针
-    * `rdi,rsi,rdx,rcx` 常用作入参数
-    * `rip` 指令指针寄存器
-    * `r8~r15` 通用寄存器
-    * `rflags` 标识寄存器
+  * `rax` 常用作函数返回值
+  * `rsp`栈顶指针
+  * `rbp` 栈底指针
+  * `rdi,rsi,rdx,rcx` 常用作入参数
+  * `rip` 指令指针寄存器
+  * `r8~r15` 通用寄存器
+  * `rflags` 标识寄存器
         </br>该寄存器中有许多位，分别作为不同的标志。常用的有
         CF： 进位标志，PF ： 奇偶标志，ZF ： 零标志，SF ： 符号标志，OF ： 补码溢出标志，TF： 跟踪标志，IF ： 中断标志
 
     </br>
 * `常见寻址模式在汇编语言中的表现形式`
-    * 直接寻址 `mov rax, QWORD PTR [0x007]`
-    * 立即数寻址 `mov rdi,0x0`
+  * 直接寻址 `mov rax, QWORD PTR [0x007]`
+  * 立即数寻址 `mov rdi,0x0`
         </br>$\quad$ 常见于：
-        * 局部变量赋值
+    * 局部变量赋值
+
             ``` c++
             int a = 0; 
             ```
-        * for,if的数值大小判断
+    * for,if的数值大小判断
+
             ``` c++
             if (c<10)
             ```
-        * 栈的扩容和回收
+    * 栈的扩容和回收
+
             ``` amd64
             sub rsp,32
             ```
-    * 寄存器寻址 `mov rdi,rax`
-    * 寄存器相对寻址 `mov DWORD PTR -16[rbp],edi`
+  * 寄存器寻址 `mov rdi,rax`
+  * 寄存器相对寻址 `mov DWORD PTR -16[rbp],edi`
         </br>$\quad$ 常见于：
-        * 局部变量的赋值和引用（即使用栈）
+    * 局部变量的赋值和引用（即使用栈）
+
             ```  c++
             int a=5; 
             a=c;
             delete ptr;
             ```
-            * 访问结构体或类对象的成员
+      * 访问结构体或类对象的成员
+
             ```  c++
             Human jack;
             jack.id =1;
             ```
-    * rip-relative `lea	rax, .LC0[rip]` .LC0是字符串相对于rip的偏移量，是PIC
+  * rip-relative `lea rax, .LC0[rip]` .LC0是字符串相对于rip的偏移量，是PIC
     </br>$\quad$ 常见于：
-        * 对全局变量的使用
-        * 字符串常量的使用
+    * 对全局变量的使用
+    * 字符串常量的使用
+
             ``` c++
             string str = "hello world";
             printf("cycle times %d",index);
             ```
-    * <font color=#ff0>以上各种寻址可总结为</font>
+  * <font color=#ff0>以上各种寻址可总结为</font>
+
         ```
         EffectiveAddress = BaseReg + IndexReg * ScaleFactor + Disp
         ```
+
     </br>
 * `条件跳转、非条件跳转、间接跳转、函数调用、返回`
-    </br>*<font color=#FF808>注意：跳转指令以及call操作的立即数就是相对于rip(或esp)的偏移，不是绝对地址 !</font>*
-    * 条件跳转 检查标识位寄存器rflags
+    </br>*<font color=#FF808>注意：除了jmp既可偏移又可绝对（视具体opcode定），其他跳转指令以及call操作的立即数就是相对于rip(或esp)的偏移，不是绝对地址 !</font>*
+  * 条件跳转 检查标识位寄存器rflags
     </br>JE/JZ：`[ZF==1]`，则跳转到目标地址。
     </br>JNE/JNZ：`[ZF==0]`，则跳转到目标地址。
     </br>JG/JNLE：`[ZF==0 && SF==OF]`，则跳转到目标地址。
     </br>JGE/JNL：`[ZF==1 || SF!=OF]`，则跳转到目标地址。
-    * 非条件跳转
-    </br>JMP 直接跳转到目标地址位置
-    * 间接跳转 常见于调用其他模块的函数，如使用标准c库的printf()。先跳转plt，在从got中找到并跳转该函数第一条指令的实际内存地址处。
-    * 函数调用
+  * 非条件跳转
+    </br>JMP 直接跳转到绝对目标地址位置
+  * 间接跳转 常见于调用其他模块的函数，如使用标准c库的printf()。先跳转plt，在从got中找到并跳转该函数第一条指令的实际内存地址处。
+  * 函数调用
     </br>call 跳转并将rip的值（即下一条指令的地址）压栈
-    * 返回
+  * 返回
     </br> ret 从栈中弹出返回地址并跳转，同时恢复栈底指针rbp到上一函数帧的栈底。
 * `什么是PIE、PIC?`
-    * 什么是Position-Independent?
+  * 什么是Position-Independent?
             </br>$\quad$ 位置无关，无论文件装载到内存的哪个位置，指令的二进制码都不会改变。
-    * PIE(Position-Independent Executable) 位置无关代码所组成的可执行二进制文件，有时可称为PIC Executable。当程序加载时，PIE文件以及它所有的依赖都会加载到虚拟内存空间中的随机位置
-    * PIC(Position-Independent Code)位置无关代码。典型的如对共享库的调用。通过plt,got进行跳转,指令中没有实际的函数地址，在运行时由动态链接器确定并写入.got。具体可参考[->Linux 动态链接过程中的【重定位】底层原理](https://mp.weixin.qq.com/s/5oK1-uO_7d3bjN8IXXw8EQ)
-    * 位置无关的实现：
-        * 跳转指令 立即数即相对于rip(或esp)的偏移
-        * 字符串常量等rodata以及全局变量.bss/.data的使用 通过rip相对寻址
-        * 对动态链接库的使用
+  * PIE(Position-Independent Executable) 位置无关代码所组成的可执行二进制文件，有时可称为PIC Executable。若文件为PIE且已开启ASLR，则该可执行文件加载到虚拟内存空间中的随机位置。
+  * PIC(Position-Independent Code)位置无关代码。典型的如对共享库的调用。通过plt,got进行跳转,指令中没有实际的函数地址，在运行时由动态链接器确定并写入.got。具体可参考[->Linux 动态链接过程中的【重定位】底层原理](https://mp.weixin.qq.com/s/5oK1-uO_7d3bjN8IXXw8EQ)
+  * 位置无关的实现：
+    * 跳转指令 立即数即相对于rip(或esp)的偏移
+    * 字符串常量等rodata以及全局变量.bss/.data的使用 通过rip相对寻址
+    * 对动态链接库的使用
 * `string instruction`
-    * 专用于字符串操作的指令，有cmps,movs,lods,stos等
-    * 前缀指令 REP、REPE与REPNE:
-        * rep 重复执行，终止条件为`[rcx==0]`。常用于字符串的复制
+  * 专用于字符串操作的指令，有cmps,movs,lods,stos等
+  * 前缀指令 REP、REPE与REPNE:
+    * rep 重复执行，终止条件为`[rcx==0]`。常用于字符串的复制
+
             ```
             rep movsb
             ```
+
             从源地址(RSI)复制n个字节到目标地址(DI)
-        * repe/repz
+    * repe/repz
             rep 重复执行，终止条件为`[rcx==0 && ZF=0]`。常用于字符串的比较
+
             ```
             repe cmps
             ```
+
             找出源地址(RSI)和目标地址(RDI)之间不一样的字
-        * repnz/repne
+    * repnz/repne
             即repe/repz取反
 * `函数调用时的参数传递方案（即AMD64 Calling Convention）`
-    * <font color=#099>calling convention的定义以及意义：</font></br>
+  * <font color=#009999>calling convention的定义以及意义：</font></br>
     *' calling convention '是规定子过程如何获取参数以及如何返回的方案。它明确了主调函数和被调函数在参数、返回值、栈底指针、返回地址等数据的保存、恢复、使用、销毁上的责任归属，确保程序能够正常的调用和返回。*
     </br></br>
     1. 入参 调用前需要为被调函数准备好参数
@@ -153,5 +171,72 @@ learning to read assambly code
         * ret 从栈中弹出返回地址并跳转，同时恢复栈底指针rbp到上一函数帧的栈底。
         * 清理栈中的参数。
         * 从栈中恢复rsi,rdi,rcx,rdx,r8,r9寄存器（若使用）。
+
 ## 2023.7.20
-* ready to make some exec crash
+
+ready to make some exec crash  
+
+## 2023.7.24
+
+crashed pwn02,pwn03,pwn10.
+
+## 2023.7.25 漏洞攻击
+
+### <font color=#009999>无地址随机化和栈不可执行的攻击方式</font>
+
+* `shellcode`  
+因为常用于获取shell从而继续执行攻击所以叫这个名字，也可以是其他的。 是一串指令。 </br>
+  攻击过程（以栈溢出为例）：
+    1. 寻找漏洞
+    2. 利用栈溢出，向栈上写入shellcode，同时覆盖返回地址使其指向shellcode的起始地址。
+    3. 使函数执行到返回，ret时即跳转到shellcode执行，进而获得shell。
+    <!-- ![shellcode stack illustration](shellcode.jpeg) -->
+  如何获得shell：
+    1. 网上下
+    2. 软件生成,msf,cobalstrike,pwntools
+    3. 手写
+
+### <font color=#009999>栈不可执行保护及其攻击方式</font>
+
+* `W⊕X`
+  * 什么是W xor X？
+    </br>$\quad$对于内存中的页，可写和可执行只能择其一。
+  * 实现：OS+CPU
+  * 使向栈或其他数据段写入shellcode并执行的攻击失效。
+* `DEP` (Data Execution Prevention)
+  * DEP是一个windows的系统级内存保护功能。
+  * 将内存中的一些区域标记为data-only，并禁止从这些内存区域运行任何可执行代码或应用程序。最小单元也为页。
+  * 默认堆、堆栈和内存池等数据页将被标记为data-only。
+  * 如果应用程序尝试从受保护的页运行代码，则应用程序会收到异常。
+* `ROP` (Return Oriented Programming)
+  * <font color=#f5deb3>ret2text</font> </br>控制程序执行程序本身已有的的代码 (.text)。
+  * <font color=#f5deb3>ret2syscall</font> </br>控制程序执行系统调用来获得shell
+    1. 寻找能够准备参数的gadget（可能需要多个）。用gadget的地址覆盖返原回地址。参数应为
+        ``` c
+        eax=0xb   //execve的系统调用号。execve是一个执行文件的系统调用，会fork一个子进程
+        ebx=&"/bin/sh"
+        ecx,edx=NULL
+        ```
+
+    2. 找一个指令为[int 0x80]的地址，用其覆盖栈上最后一个gadget后的高32位（或64），即gadget的返回地址。`[int 0x80]`是陷入内核态，执行某个系统调用，根据0xb参数将执行execve。  再由execve启动/bin/sh
+    3. 使函数能执行到返回
+    <!-- ![ret2syscall illustration](ret2syscall.jpeg) -->
+    </br>
+  * <font color=#f5deb3>ret2外部动态链接的函数</font> </br>控制程序执行外部的函数。如执行libc的`system("/bin/sh",NULL)`
+    1. 寻找能够准备参数的gadgets。用gadget们的地址覆盖返原回地址。
+    2. 找到想使用的函数在.plt中的地址用其覆盖栈上返回地址处的相邻高32位（或64），即gadget的返回地址。
+    3. 使函数能执行到返回  
+
+  ROP关键即在于用gadgets+parameter+final return构造一个ROP链⛓️
+
+### <font color=#009999>地址随机及其攻击方式</font>
+
+* `ASLR`(Address Space Layout Randomization)
+  * ASLR通过随机化内存中代码、数据和堆栈的位置，使攻击者更难以预测系统的内存布局，从而降低了成功利用漏洞进行攻击的可能性。  
+  *<font color=#FF8080>注意：在开启了ASLR的系统中，进程使用的内存空间可被分为heap,stack,lib,可执行文件等多段，段与段之间不相连，每个段随机选基址。段内为一个整体，不会有随机偏移。即对于代码段来说，相对rip的偏移都是不变的。</font>*    
+  ![aslr-illustration](./ASLR_illustration.png)  
+  可参考文章[aslr-pie.pdf](./aslr-pie.pdf)的3 , 4。  
+  <font color=#Ff8500 size=4>ALSR不能解决漏洞，而是增加利用漏洞的难度！</font>
+* `泄露基地址`  
+  * ROP攻击需要确切的地址。而由于ASLR的开启，必须要获取本次运行时的基址才能ret2xxx。
+  * 泄漏原理：一个可执行文件不可避免要用到外部的函数或数据，如使用libc的printf()。对于PIE来说，对外部函数或变量通过.got,.plt实现。第一次访问时，通过动态链接器获取被调函数或变量的实际的地址，并存入.got。以调用printf()为例，第一次调用后pringf()的实际地址就存入.got。找到.text中调用printf()的指令（call offset），根据偏移量即可得出printf对应的.plt表项，再根据该表项的jmp找到printf对应的.got表项，并将其地址作为输出函数的参数，即可通过printf,put,write等函数输出。
